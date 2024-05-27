@@ -17,7 +17,7 @@ public class App extends Application {
     private static final Logger LOG = Logger.getLogger(App.class.getName());
 
     //Attribut
-    private static Hello hello = null;
+    private static Baignoire hello = null;
 
     private static String fichier = null;
 
@@ -64,7 +64,7 @@ public class App extends Application {
             formatter.printHelp("hello", options);
             System.exit(1);
         }
-        hello = new Hello(fprenoms);
+        hello = new Baignoire();
         //process
         LOG.info("Démarrage du traitement");
         fichier = fprenoms;

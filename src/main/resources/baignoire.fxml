@@ -5,16 +5,17 @@
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Text?>
 
-<SplitPane fx:id="BODYPANE" dividerPositions="0.75, 1.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<SplitPane fx:id="bodyPane" dividerPositions="0.75, 1.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.ul.miage.marcus.POOfxml.BaignoireController">
   <items>
       <BorderPane fx:id="VISUALISATION" minWidth="0.0" prefHeight="200.0" prefWidth="200.0">
          <left>
@@ -37,22 +38,22 @@
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Pane fx:id="ROBINET1" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: lightblue;">
+                        <Pane fx:id="robinet1" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: lightblue;">
                            <GridPane.margin>
                               <Insets left="10.0" right="10.0" />
                            </GridPane.margin>
                         </Pane>
-                        <Pane fx:id="ROBINET2" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: lightblue;" GridPane.columnIndex="2">
+                        <Pane fx:id="robinet3" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: lightblue;" GridPane.columnIndex="2">
                            <GridPane.margin>
                               <Insets left="10.0" right="10.0" />
                            </GridPane.margin>
                         </Pane>
-                        <Pane fx:id="ROBINET3" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: lightblue;" GridPane.columnIndex="1">
+                        <Pane fx:id="robinet2" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: lightblue;" GridPane.columnIndex="1">
                            <GridPane.margin>
                               <Insets left="10.0" right="10.0" />
                            </GridPane.margin>
                         </Pane>
-                        <Pane fx:id="ROBINET4" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: lightblue;" GridPane.columnIndex="3">
+                        <Pane fx:id="robinet4" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: lightblue;" GridPane.columnIndex="3">
                            <GridPane.margin>
                               <Insets left="10.0" right="10.0" />
                            </GridPane.margin>
@@ -72,22 +73,22 @@
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Pane fx:id="FUITE1" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: lightblue;">
+                        <Pane fx:id="fuite1" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: lightblue;">
                            <GridPane.margin>
                               <Insets left="10.0" right="10.0" />
                            </GridPane.margin>
                         </Pane>
-                        <Pane fx:id="FUITE2" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: lightblue;" GridPane.columnIndex="1">
+                        <Pane fx:id="fuite2" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: lightblue;" GridPane.columnIndex="1">
                            <GridPane.margin>
                               <Insets left="10.0" right="10.0" />
                            </GridPane.margin>
                         </Pane>
-                        <Pane fx:id="FUITE3" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: lightblue;" GridPane.columnIndex="2">
+                        <Pane fx:id="fuite3" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: lightblue;" GridPane.columnIndex="2">
                            <GridPane.margin>
                               <Insets left="10.0" right="10.0" />
                            </GridPane.margin>
                         </Pane>
-                        <Pane fx:id="FUITE4" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: lightblue;" GridPane.columnIndex="3">
+                        <Pane fx:id="fuite4" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: lightblue;" GridPane.columnIndex="3">
                            <GridPane.margin>
                               <Insets left="10.0" right="10.0" />
                            </GridPane.margin>
@@ -96,9 +97,9 @@
                   </GridPane>
                </bottom>
                <center>
-                  <BorderPane id="BAIGNOIRE_PANE" fx:id="BAIGNOIRE_PANE" prefHeight="100.0" prefWidth="200.0" style="-fx-border-color: black;" BorderPane.alignment="CENTER">
+                  <BorderPane fx:id="baignoirePane" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                      <bottom>
-                        <Pane fx:id="EAU_BAIGNOIRE" prefHeight="0.0" prefWidth="266.0" style="-fx-background-color: lightBLUE;" BorderPane.alignment="CENTER" />
+                        <Rectangle fx:id="eauBaignoire" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" stroke="BLACK" strokeType="INSIDE" width="265.0" BorderPane.alignment="CENTER" />
                      </bottom>
                   </BorderPane>
                </center>
@@ -127,14 +128,14 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Text fx:id="LBL_FUITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Boucher des fuites" />
-                  <Button fx:id="BTN_FUITE1" mnemonicParsing="false" text="Réparer fuite 1" GridPane.rowIndex="1" />
-                  <Button fx:id="BTN_FUITE2" mnemonicParsing="false" text="Réparer fuite 2" GridPane.rowIndex="2" />
-                  <Button fx:id="BTN_FUITE3" mnemonicParsing="false" text="Réparer fuite 3" GridPane.rowIndex="3" />
-                  <Button fx:id="BTN_FUITE4" mnemonicParsing="false" text="Réparer fuite 4" GridPane.rowIndex="4" />
+                  <Text fx:id="lbl_fuite" strokeType="OUTSIDE" strokeWidth="0.0" text="Boucher des fuites" />
+                  <Button fx:id="btn_fuite1" mnemonicParsing="false" onAction="#reparerFuite" text="Réparer fuite 1" GridPane.rowIndex="1" />
+                  <Button fx:id="btn_fuite2" mnemonicParsing="false" onAction="#reparerFuite" text="Réparer fuite 2" GridPane.rowIndex="2" />
+                  <Button fx:id="btn_fuite3" mnemonicParsing="false" onAction="#reparerFuite" text="Réparer fuite 3" GridPane.rowIndex="3" />
+                  <Button fx:id="btn_fuite4" mnemonicParsing="false" onAction="#reparerFuite" text="Réparer fuite 4" GridPane.rowIndex="4" />
                </children>
                <padding>
-                  <Insets left="5.0" />
+                  <Insets left="5.0" top="10.0" />
                </padding>
             </GridPane>
             <GridPane fx:id="REGLAGEROBINET" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" vgap="10.0">
@@ -147,17 +148,15 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints />
                </rowConstraints>
                <children>
-                  <Spinner fx:id="SPN_REGLAGEROBINET1" GridPane.rowIndex="1">
-                     <GridPane.margin>
-                        <Insets />
-                     </GridPane.margin>
-                  </Spinner>
-                  <Spinner fx:id="SPN_REGLAGEROBINET2" GridPane.rowIndex="2" />
-                  <Spinner fx:id="SPN_REGLAGEROBINET3" GridPane.rowIndex="3" />
-                  <Spinner fx:id="SPN_REGLAGEROBINET4" GridPane.rowIndex="4" />
                   <Text fx:id="LBL_ROBINET" strokeType="OUTSIDE" strokeWidth="0.0" text="Modifier robinet" />
+                  <TextField fx:id="tf_reglageRobinet1" GridPane.rowIndex="1" />
+                  <TextField fx:id="tf_reglageRobinet2" layoutX="15.0" layoutY="35.0" onAction="#reglageRobinet" GridPane.rowIndex="2" />
+                  <TextField fx:id="tf_reglageRobinet3" layoutX="15.0" layoutY="6.0" onAction="#reglageRobinet" GridPane.rowIndex="3" />
+                  <TextField fx:id="tf_reglageRobinet4" layoutX="15.0" layoutY="6.0" onAction="#reglageRobinet" GridPane.rowIndex="4" />
+                  <Button fx:id="btn_reglageRobinet" mnemonicParsing="false" onAction="#reglageRobinet" text="Mettre à jour" GridPane.rowIndex="5" />
                </children>
                <padding>
                   <Insets left="5.0" />
@@ -172,8 +171,8 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Button fx:id="BTN_CHANGERAFFICHAGE" alignment="CENTER" mnemonicParsing="false" text="Changer affichage" />
-                  <Button fx:id="BTN_DEMARRERARETTER" alignment="CENTER" mnemonicParsing="false" text="Demarrer simulation" GridPane.rowIndex="1" />
+                  <Button fx:id="btn_changerAffichage" alignment="CENTER" mnemonicParsing="false" onAction="#changerAffichage" text="Changer affichage" />
+                  <Button fx:id="btn_demarrerArreter" alignment="CENTER" mnemonicParsing="false" onAction="#demarrerArreter" text="Demarrer simulation" GridPane.rowIndex="1" />
                </children>
                <GridPane.margin>
                   <Insets left="5.0" />
