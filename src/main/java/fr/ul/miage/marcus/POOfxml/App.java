@@ -16,6 +16,8 @@ public class App extends Application {
     //Création d'un logger
     private static final Logger LOG = Logger.getLogger(App.class.getName());
 
+    public static Level currentLogLevel = Level.WARNING;
+
     //Attribut
     private static Baignoire hello = null;
 
@@ -26,7 +28,7 @@ public class App extends Application {
         primaryStage.setTitle("Exercice JavaFX : Hello");
         try {
             FXMLLoader loader =new FXMLLoader(getClass().getResource("/baignoire.fxml"));
-            loader.setControllerFactory(c->{return new BaignoireController(fichier);});
+            loader.setControllerFactory(c-> new BaignoireController(fichier));
             Parent root = loader.load();
             Scene scene = new Scene(root);
             primaryStage.setScene(scene);
@@ -51,10 +53,10 @@ public class App extends Application {
         CommandLineParser parser = new DefaultParser();
         try {
             CommandLine line = parser.parse(options, args);
-            LOG.setLevel(Level.WARNING);
             if (line.hasOption("d")){
-                LOG.setLevel(Level.INFO);
+                currentLogLevel = Level.INFO;
             }
+            LOG.setLevel(currentLogLevel);
             if (line.hasOption("f")) {
                 fprenoms = line.getOptionValue('f');
             }

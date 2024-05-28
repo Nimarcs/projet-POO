@@ -17,6 +17,7 @@ public class Baignoire {
     }
 
     public Baignoire(double capacite){
+        LOG.setLevel(App.currentLogLevel);
         this.capacite = capacite;
     }
 

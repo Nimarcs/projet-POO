@@ -10,8 +10,11 @@ import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 
 import java.util.Arrays;
+import java.util.logging.Logger;
 
 public class BaignoireController {
+
+    public static final Logger LOG = Logger.getLogger(BaignoireController.class.getName());
 
     @FXML
     private Rectangle eauBaignoire;
@@ -80,17 +83,14 @@ public class BaignoireController {
 
 
     public BaignoireController(String fichier) {
+        LOG.setLevel(App.currentLogLevel);
         baignoire = new Baignoire();
     }
 
-    @FXML
-    void sayHello() {
-        System.out.println("hello");
-    }
 
     @FXML
     void demarrerArreter(){
-        System.out.println("demarrerArreter");
+        LOG.info("");
     }
 
 

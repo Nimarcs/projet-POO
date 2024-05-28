@@ -29,6 +29,7 @@ public class Robinet extends ScheduledService<Baignoire> {
      * @param baignoire baignoire associée
      */
     public Robinet(Baignoire baignoire){
+        LOG.setLevel(App.currentLogLevel);
         this.baignoire = baignoire;
         this.debit = DEFAUT_DEBIT;
     }

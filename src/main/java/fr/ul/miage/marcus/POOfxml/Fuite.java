@@ -32,6 +32,7 @@ public class Fuite extends ScheduledService<Baignoire> {
      */
     public Fuite(Baignoire baignoire){
         super();
+        LOG.setLevel(App.currentLogLevel);
         this.baignoire = baignoire;
     }
 
