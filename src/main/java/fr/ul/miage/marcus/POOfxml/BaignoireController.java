@@ -101,13 +101,15 @@ public class BaignoireController {
     private Button btn_fuite4;
 
     @FXML
-    private Button btn_changerAffichage;
-
-    @FXML
     private Button btn_demarrerArreter;
 
     @FXML
     private Button btn_reglageRobinet;
+
+    @FXML
+    private Button btn_reglageFuite;
+
+    private Button btn_reglageCapacite;
 
     private Baignoire baignoire;
 
@@ -148,6 +150,7 @@ public class BaignoireController {
 
     @FXML
     void demarrerArreter(){
+        //TODO ajouter une désactivation de bouton propre
         btn_demarrerArreter.setDisable(true);
 
         if (simulationEnCours) {
@@ -163,7 +166,9 @@ public class BaignoireController {
 
             btn_demarrerArreter.setText("Demarrer simulation");
 
-        } else {
+        }
+        else
+        {
             //Initialisation
             LOG.info("Demarrage de la simulation");
             top = Instant.now();
@@ -218,22 +223,22 @@ public class BaignoireController {
         btn_demarrerArreter.setDisable(false);
     }
 
-
-    @FXML
-    void changerAffichage(){
-        System.out.println("changerAffichage");
-    }
-
     @FXML
     void reparerFuite(ActionEvent event){
         System.out.println("Reparer fuite : " + ((Button) event.getSource()).getId());
     }
 
     @FXML
-    void reglageRobinet(ActionEvent event){
+    void reglageRobinet(){
+        //btn_reglageRobinet
         System.out.println("reglage robinet" + tf_reglageRobinet1.getText() + tf_reglageRobinet2.getText() + tf_reglageRobinet3.getText() + tf_reglageRobinet4.getText());
     }
 
+    @FXML
+    void reglageFuite(){
+        System.out.println("reglage fuite" + tf_reglageFuite1.getText() + tf_reglageFuite2.getText() + tf_reglageFuite3.getText() + tf_reglageFuite4.getText());
+
+    }
 
 
     public void reglageCapacite() {
