@@ -17,7 +17,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Text?>
 
-<TabPane fx:id="bodyPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.ul.miage.marcus.POOfxml.BaignoireController">
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.ul.miage.marcus.POOfxml.BaignoireController">
     <tabs>
         <Tab closable="false" text="Baignoire">
          <content>
@@ -196,7 +196,7 @@
                             </rowConstraints>
                             <children>
                                 <Button fx:id="btn_demarrerArreter" alignment="CENTER" mnemonicParsing="false" onAction="#demarrerArreter" text="Demarrer simulation" GridPane.rowIndex="1" />
-                        <TextField />
+                        <TextField fx:id="tf_capacity" />
                         <Button mnemonicParsing="false" onAction="#reglageCapacite" text="Modifier la capacité" GridPane.columnIndex="1" />
                             </children>
                             <GridPane.margin>

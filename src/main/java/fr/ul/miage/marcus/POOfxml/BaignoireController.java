@@ -3,21 +3,15 @@ package fr.ul.miage.marcus.POOfxml;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Parent;
-import javafx.scene.chart.LineChart;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.Region;
 import javafx.scene.shape.Rectangle;
-import javafx.stage.Window;
 import javafx.util.Duration;
 
 import java.time.Instant;
-import java.util.Arrays;
 import java.util.logging.Logger;
 
 public class BaignoireController {
@@ -90,6 +84,9 @@ public class BaignoireController {
 
     @FXML
     private TextField tf_reglageFuite4;
+
+    @FXML
+    private TextField tf_capacity;
 
     @FXML
     private Button btn_fuite1;
@@ -234,6 +231,33 @@ public class BaignoireController {
     }
 
 
+
+    public void reglageCapacite() {
+        try {
+            double nouvelleCapacite = recupereDouble(tf_capacity);
+            if (simulationEnCours) {
+                afficheErreur("La simulation est en cours, le reglage de la capacité n'est pas censé être disponible");
+                return;
+            }
+
+            baignoire.setCapacite(nouvelleCapacite);
+            LOG.info("Nouvelle capacité de la baignoire : " + nouvelleCapacite);
+            afficheInformation("Capacité de la baignoire changée");
+        } catch (IllegalArgumentException ignored){
+            afficheErreur("Valeur de la capacité invalide");
+            // On ne met pas à jour
+        }
+    }
+
+    private double recupereDouble(TextField textField) throws NumberFormatException{
+        try {
+            return Double.parseDouble(textField.getText());
+        } catch (NumberFormatException e) {
+            LOG.severe(String.format("%s - INPUT ERROR - expected a number got %s",textField.getId(), textField.getText()));
+            throw e;
+        }
+    }
+
     private boolean checkDebitArray(int[] debits) {
         if (debits.length > MAX_INOUT) return false;
         for (int debit: debits) {
@@ -268,7 +292,14 @@ public class BaignoireController {
         }
     }
 
-    public void reglageCapacite() {
-        //TODO
+    private void afficheErreur(String s) {
+        LOG.severe(s);
+        Alert alert = new Alert(Alert.AlertType.ERROR, s);
+        alert.show();
+    }
+
+    private void afficheInformation(String s) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, s);
+        alert.show();
     }
 }

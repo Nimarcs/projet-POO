@@ -46,6 +46,14 @@ public class Baignoire {
         return volume;
     }
 
+    public void setCapacite(double capacite) throws IllegalArgumentException {
+        if (capacite < 0.0) {
+            LOG.severe("Capacité d'une baignoire doit être positif, or " + capacite + " est négatif");
+            throw new IllegalArgumentException("Capacité doit être positif");
+        }
+        this.capacite = capacite;
+    }
+
     public double getVolume() {
         return volume;
     }
