@@ -5,10 +5,12 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 import java.time.Instant;
@@ -19,10 +21,6 @@ public class BaignoireController {
     public static final Logger LOG = Logger.getLogger(BaignoireController.class.getName());
 
     private static final int MAX_INOUT = 4;
-
-
-    @FXML
-    public Button btn_reglageFuite1;
 
 
 //    @FXML
@@ -109,7 +107,11 @@ public class BaignoireController {
     @FXML
     private Button btn_reglageFuite;
 
+    @FXML
     private Button btn_reglageCapacite;
+
+    @FXML
+    private Text txt_boucherFuite;
 
     private Baignoire baignoire;
 
@@ -129,11 +131,11 @@ public class BaignoireController {
         robinets = new Robinet[MAX_INOUT];
         fuites = new Fuite[MAX_INOUT];
 
-        if (!checkDebitArray(debitRobinet)){
+        if (!verifieDebitArray(debitRobinet)){
             LOG.severe("Les débits fourni pour les fuites sont interdits");
             throw new IllegalArgumentException("Débit des robinets illégaux");
         }
-        if (!checkDebitArray(debitFuite)){
+        if (!verifieDebitArray(debitFuite)){
             LOG.severe("Les débits fourni pour les fuites sont interdits");
             throw new IllegalArgumentException("Débit des fuites illégaux");
         }
@@ -150,22 +152,10 @@ public class BaignoireController {
 
     @FXML
     void demarrerArreter(){
-        //TODO ajouter une désactivation de bouton propre
         btn_demarrerArreter.setDisable(true);
 
         if (simulationEnCours) {
-            LOG.info("Arret de la simulation");
-            simulationEnCours = false;
-            java.time.Duration duration = java.time.Duration.between(top, Instant.now());
-            System.out.println("Arret de la simulation après : " + duration.toMillis() + "ms");
-
-            for (int i = 0; i < MAX_INOUT; i++) {
-                if (fuites[i] != null) {fuites[i].cancel();}
-                if (robinets[i] != null) {robinets[i].cancel();}
-            }
-
-            btn_demarrerArreter.setText("Demarrer simulation");
-
+            terminerSimulation();
         }
         else
         {
@@ -176,7 +166,9 @@ public class BaignoireController {
             baignoire.vider();
             eauBaignoire.setHeight(0.0);
 
-            setDisplayInOut();
+            mettreAJourAffichageBouton(simulationEnCours);
+
+            regleVisibiliteEntreSortieEau();
 
             //On defini les robinets
             robinets = new Robinet[MAX_INOUT];
@@ -189,17 +181,7 @@ public class BaignoireController {
 
                     //Si la baignoire pleine on arrete tout
                     if (baignoire.estPlein() && simulationEnCours){
-                        //On termine la simulation
-                        simulationEnCours = false;
-
-                        java.time.Duration duration = java.time.Duration.between(top, Instant.now());
-                        System.out.println("Temps de remplissage : " + duration.toMillis() + "ms");
-
-                        //On arrete tout
-                        for (int j = 0; j < MAX_INOUT; j++) {
-                            if (fuites[j] != null) {fuites[j].cancel();}
-                            if (robinets[j] != null) {robinets[j].cancel();}
-                        }
+                        terminerSimulation();
                     }
                 });
                 robinets[i] = robinet;
@@ -272,9 +254,27 @@ public class BaignoireController {
         }
     }
 
+
     /*
     PRIVATE FONCTION
      */
+
+    private void terminerSimulation() {
+        LOG.info("Arret de la simulation");
+        simulationEnCours = false;
+        java.time.Duration duration = java.time.Duration.between(top, Instant.now());
+        System.out.println("Arret de la simulation après : " + duration.toMillis() + "ms");
+
+        for (int i = 0; i < MAX_INOUT; i++) {
+            if (fuites[i] != null) {fuites[i].cancel();}
+            if (robinets[i] != null) {robinets[i].cancel();}
+        }
+
+        btn_demarrerArreter.setText("Demarrer simulation");
+
+        mettreAJourAffichageBouton(simulationEnCours);
+    }
+
 
     private double recupereDouble(TextField textField) throws NumberFormatException{
         try {
@@ -287,7 +287,7 @@ public class BaignoireController {
         }
     }
 
-    private boolean checkDebitArray(int[] debits) {
+    private boolean verifieDebitArray(int[] debits) {
         if (debits.length > MAX_INOUT) return false;
         for (int debit: debits) {
             if (debit < 0.0) return false;
@@ -295,14 +295,14 @@ public class BaignoireController {
         return true;
     }
 
-    private void setDisplayInOut() {
+    private void regleVisibiliteEntreSortieEau() {
         //robinets
-        setVisibilityInOut(robinet1, robinet2, robinet3, robinet4, debitRobinet);
+        regleVisibiliteEntreSortieEau(robinet1, robinet2, robinet3, robinet4, debitRobinet);
         //fuites
-        setVisibilityInOut(fuite1, fuite2, fuite3, fuite4, debitFuite);
+        regleVisibiliteEntreSortieEau(fuite1, fuite2, fuite3, fuite4, debitFuite);
     }
 
-    private void setVisibilityInOut(Pane pane1, Pane pane2, Pane pane3, Pane pane4, int[] debits) {
+    private void regleVisibiliteEntreSortieEau(Pane pane1, Pane pane2, Pane pane3, Pane pane4, int[] debits) {
         pane1.setVisible(true);
         pane2.setVisible(true);
         pane3.setVisible(true);
@@ -330,5 +330,22 @@ public class BaignoireController {
     private void afficheInformation(String s) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION, s);
         alert.show();
+    }
+
+    private void mettreAJourAffichageBouton(boolean simulationEnCours) {
+        //On active desactives les boutons
+        btn_reglageFuite.setDisable(simulationEnCours);
+        btn_reglageCapacite.setDisable(simulationEnCours);
+        btn_fuite1.setDisable(!simulationEnCours);
+        btn_fuite2.setDisable(!simulationEnCours);
+        btn_fuite3.setDisable(!simulationEnCours);
+        btn_fuite4.setDisable(!simulationEnCours);
+
+        //On masque les boutons des fuites désactivés
+        txt_boucherFuite.setVisible(simulationEnCours);
+        btn_fuite1.setVisible(simulationEnCours);
+        btn_fuite2.setVisible(simulationEnCours);
+        btn_fuite3.setVisible(simulationEnCours);
+        btn_fuite4.setVisible(simulationEnCours);
     }
 }

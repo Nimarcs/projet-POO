@@ -207,11 +207,11 @@
                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                             </rowConstraints>
                             <children>
-                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Boucher des fuites" GridPane.columnIndex="1" />
-                                <Button fx:id="btn_fuite1" mnemonicParsing="false" onAction="#reparerFuite" text="Réparer fuite 1" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                <Button fx:id="btn_fuite2" mnemonicParsing="false" onAction="#reparerFuite" text="Réparer fuite 2" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                <Button fx:id="btn_fuite3" mnemonicParsing="false" onAction="#reparerFuite" text="Réparer fuite 3" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                                <Button fx:id="btn_fuite4" mnemonicParsing="false" onAction="#reparerFuite" text="Réparer fuite 4" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                                <Text fx:id="txt_boucherFuite" strokeType="OUTSIDE" strokeWidth="0.0" text="Boucher des fuites" visible="false" GridPane.columnIndex="1" />
+                                <Button fx:id="btn_fuite1" disable="true" mnemonicParsing="false" onAction="#reparerFuite" text="Réparer fuite 1" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                <Button fx:id="btn_fuite2" disable="true" mnemonicParsing="false" onAction="#reparerFuite" text="Réparer fuite 2" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                <Button fx:id="btn_fuite3" disable="true" mnemonicParsing="false" onAction="#reparerFuite" text="Réparer fuite 3" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                <Button fx:id="btn_fuite4" disable="true" mnemonicParsing="false" onAction="#reparerFuite" text="Réparer fuite 4" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                         <Button fx:id="btn_reglageFuite" mnemonicParsing="false" onAction="#reglageFuite" text="Mettre à jour" GridPane.rowSpan="2147483647">
                            <GridPane.margin>
                               <Insets />
