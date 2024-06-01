@@ -142,6 +142,10 @@ public class BaignoireController {
     }
 
 
+    /*
+    Reaction a l'appui de bouton
+     */
+
     @FXML
     void demarrerArreter(){
         btn_demarrerArreter.setDisable(true);
@@ -248,6 +252,10 @@ public class BaignoireController {
             // On ne met pas à jour
         }
     }
+
+    /*
+    PRIVATE FONCTION
+     */
 
     private double recupereDouble(TextField textField) throws NumberFormatException{
         try {
