@@ -21,17 +21,17 @@
     <tabs>
         <Tab closable="false" text="Baignoire">
          <content>
-                <BorderPane fx:id="VISUALISATION" minWidth="0.0" prefHeight="267.0" prefWidth="452.0">
+                <BorderPane minWidth="0.0" prefHeight="267.0" prefWidth="452.0">
                     <left>
-                        <Pane fx:id="PADDERLEFT" prefHeight="200.0" prefWidth="90.0" BorderPane.alignment="CENTER" />
+                        <Pane prefHeight="200.0" prefWidth="90.0" BorderPane.alignment="CENTER" />
                     </left>
                     <right>
-                        <Pane fx:id="PADDERRIGHT" prefHeight="200.0" prefWidth="90.0" BorderPane.alignment="CENTER" />
+                        <Pane prefHeight="200.0" prefWidth="90.0" BorderPane.alignment="CENTER" />
                     </right>
                     <center>
-                        <BorderPane fx:id="WATERWORKS" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                        <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                             <top>
-                                <GridPane fx:id="ROBINET_PANE" prefHeight="100.0" BorderPane.alignment="CENTER">
+                                <GridPane prefHeight="100.0" BorderPane.alignment="CENTER">
                                     <columnConstraints>
                                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -101,7 +101,7 @@
                                 </GridPane>
                             </bottom>
                             <center>
-                                <BorderPane fx:id="baignoirePane" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                                <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                            <bottom>
                               <AnchorPane minHeight="0.0" minWidth="0.0" prefWidth="0.0" style="-fx-background-color: lightblue;" BorderPane.alignment="CENTER">
                                  <children>
@@ -118,9 +118,10 @@
         </Tab>
         <Tab text="Parametre">
             <content>
-                <GridPane fx:id="MENU" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="400.0" prefWidth="150.0">
+                <GridPane alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="400.0" prefWidth="150.0">
                     <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                     </columnConstraints>
                     <rowConstraints>
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -128,8 +129,9 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                     <children>
-                        <GridPane fx:id="REGLAGEFUITE" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" vgap="10.0" GridPane.rowIndex="1">
+                        <GridPane fx:id="boucherFuite" alignment="CENTER_RIGHT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" vgap="10.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                             <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                             </columnConstraints>
                             <rowConstraints>
@@ -140,19 +142,25 @@
                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                             </rowConstraints>
                             <children>
-                                <Text fx:id="lbl_fuite" strokeType="OUTSIDE" strokeWidth="0.0" text="Boucher des fuites" />
-                                <Button fx:id="btn_fuite1" mnemonicParsing="false" onAction="#reparerFuite" text="Réparer fuite 1" GridPane.rowIndex="1" />
-                                <Button fx:id="btn_fuite2" mnemonicParsing="false" onAction="#reparerFuite" text="Réparer fuite 2" GridPane.rowIndex="2" />
-                                <Button fx:id="btn_fuite3" mnemonicParsing="false" onAction="#reparerFuite" text="Réparer fuite 3" GridPane.rowIndex="3" />
-                                <Button fx:id="btn_fuite4" mnemonicParsing="false" onAction="#reparerFuite" text="Réparer fuite 4" GridPane.rowIndex="4" />
+                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Boucher des fuites" GridPane.columnIndex="1" />
+                                <Button fx:id="btn_fuite1" mnemonicParsing="false" onAction="#reparerFuite" text="Réparer fuite 1" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                <Button fx:id="btn_fuite2" mnemonicParsing="false" onAction="#reparerFuite" text="Réparer fuite 2" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                <Button fx:id="btn_fuite3" mnemonicParsing="false" onAction="#reparerFuite" text="Réparer fuite 3" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                <Button fx:id="btn_fuite4" mnemonicParsing="false" onAction="#reparerFuite" text="Réparer fuite 4" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <Button fx:id="btn_reglageFuite1" mnemonicParsing="false" onAction="#reglageRobinet" text="Mettre à jour" GridPane.rowSpan="2147483647">
+                           <GridPane.margin>
+                              <Insets />
+                           </GridPane.margin>
+                        </Button>
                             </children>
-                            <padding>
-                                <Insets left="5.0" top="10.0" />
-                            </padding>
+                     <GridPane.margin>
+                        <Insets bottom="5.0" left="5.0" />
+                     </GridPane.margin>
                         </GridPane>
-                        <GridPane fx:id="REGLAGEROBINET" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" vgap="10.0">
+                        <GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" vgap="10.0" GridPane.columnSpan="2">
                             <columnConstraints>
                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                             </columnConstraints>
                             <rowConstraints>
                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -163,40 +171,64 @@
                                 <RowConstraints />
                             </rowConstraints>
                             <children>
-                                <Text fx:id="LBL_ROBINET" strokeType="OUTSIDE" strokeWidth="0.0" text="Modifier robinet" />
+                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Modifier robinet" />
                                 <TextField fx:id="tf_reglageRobinet1" GridPane.rowIndex="1" />
                                 <TextField fx:id="tf_reglageRobinet2" layoutX="15.0" layoutY="35.0" onAction="#reglageRobinet" GridPane.rowIndex="2" />
                                 <TextField fx:id="tf_reglageRobinet3" layoutX="15.0" layoutY="6.0" onAction="#reglageRobinet" GridPane.rowIndex="3" />
                                 <TextField fx:id="tf_reglageRobinet4" layoutX="15.0" layoutY="6.0" onAction="#reglageRobinet" GridPane.rowIndex="4" />
-                                <Button fx:id="btn_reglageRobinet" mnemonicParsing="false" onAction="#reglageRobinet" text="Mettre à jour" GridPane.rowIndex="5" />
+                                <Button fx:id="btn_reglageRobinet" mnemonicParsing="false" onAction="#reglageRobinet" text="Mettre à jour" GridPane.columnIndex="1" GridPane.rowSpan="2147483647">
+                           <GridPane.margin>
+                              <Insets />
+                           </GridPane.margin></Button>
                             </children>
                             <padding>
                                 <Insets left="5.0" />
                             </padding>
                         </GridPane>
-                        <GridPane fx:id="REGLAGEAFFICHAGE" GridPane.rowIndex="2">
+                        <GridPane GridPane.columnSpan="2" GridPane.rowIndex="2">
                             <columnConstraints>
                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                             </columnConstraints>
                             <rowConstraints>
                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                             </rowConstraints>
                             <children>
-                                <Button fx:id="btn_changerAffichage" alignment="CENTER" mnemonicParsing="false" onAction="#changerAffichage" text="Changer affichage" />
                                 <Button fx:id="btn_demarrerArreter" alignment="CENTER" mnemonicParsing="false" onAction="#demarrerArreter" text="Demarrer simulation" GridPane.rowIndex="1" />
+                        <TextField />
+                        <Button mnemonicParsing="false" onAction="#reglageCapacite" text="Modifier la capacité" GridPane.columnIndex="1" />
                             </children>
                             <GridPane.margin>
                                 <Insets left="5.0" />
                             </GridPane.margin>
                         </GridPane>
+                  <GridPane fx:id="reglageFuite" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" vgap="10.0" GridPane.rowIndex="1">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Modifier fuite" />
+                        <TextField fx:id="tf_reglageFuite1" GridPane.rowIndex="1" />
+                        <TextField fx:id="tf_reglageFuite2" GridPane.rowIndex="2" />
+                        <TextField fx:id="tf_reglageFuite3" GridPane.rowIndex="3" />
+                        <TextField fx:id="tf_reglageFuite4" GridPane.rowIndex="4" />
+                     </children>
+                  </GridPane>
                     </children>
                 </GridPane>
             </content>
         </Tab>
         <Tab text="Graphique">
             <content>
-                <LineChart fx:id="LINECHART" minWidth="0.0">
+                <LineChart fx:id="linechart" minWidth="0.0">
                     <xAxis>
                         <CategoryAxis side="BOTTOM" />
                     </xAxis>

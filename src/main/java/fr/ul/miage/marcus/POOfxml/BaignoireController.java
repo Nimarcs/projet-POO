@@ -4,10 +4,12 @@ import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
+import javafx.scene.chart.LineChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.shape.Rectangle;
@@ -26,10 +28,20 @@ public class BaignoireController {
 
 
     @FXML
+    public Button btn_reglageFuite1;
+
+
+//    @FXML
+//    public LineChart linechart;
+
+    @FXML
     private Rectangle eauBaignoire;
 
     @FXML
-    private BorderPane baignoirePane;
+    private GridPane reglageFuite;
+
+    @FXML
+    private GridPane boucherFuite;
 
     @FXML
     private Pane robinet1;
@@ -66,6 +78,18 @@ public class BaignoireController {
 
     @FXML
     private TextField tf_reglageRobinet4;
+
+    @FXML
+    private TextField tf_reglageFuite1;
+
+    @FXML
+    private TextField tf_reglageFuite2;
+
+    @FXML
+    private TextField tf_reglageFuite3;
+
+    @FXML
+    private TextField tf_reglageFuite4;
 
     @FXML
     private Button btn_fuite1;
@@ -244,4 +268,7 @@ public class BaignoireController {
         }
     }
 
+    public void reglageCapacite() {
+        //TODO
+    }
 }
