@@ -50,5 +50,7 @@ public class Baignoire {
         return volume;
     }
 
-
+    public void vider() {
+        volume = 0.0;
+    }
 }

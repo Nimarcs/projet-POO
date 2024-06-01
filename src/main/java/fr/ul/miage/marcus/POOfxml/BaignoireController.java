@@ -1,5 +1,6 @@
 package fr.ul.miage.marcus.POOfxml;
 
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -8,13 +9,18 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.logging.Logger;
 
 public class BaignoireController {
 
     public static final Logger LOG = Logger.getLogger(BaignoireController.class.getName());
+
+    private static final int MAX_INOUT = 4;
+
 
     @FXML
     private Rectangle eauBaignoire;
@@ -81,16 +87,107 @@ public class BaignoireController {
 
     private Baignoire baignoire;
 
+    private boolean simulationEnCours;
 
-    public BaignoireController(String fichier) {
+    private int[] debitRobinet, debitFuite;
+
+    private Instant top;
+
+    private Robinet[] robinets;
+    private Fuite[] fuites;
+
+    public BaignoireController(double capacite, int[] debitRobinet, int[] debitFuite) {
         LOG.setLevel(App.currentLogLevel);
-        baignoire = new Baignoire();
+        baignoire = new Baignoire(capacite);
+        this.simulationEnCours = false;
+        robinets = new Robinet[MAX_INOUT];
+        fuites = new Fuite[MAX_INOUT];
+
+        if (!checkDebitArray(debitRobinet)){
+            LOG.severe("Les débits fourni pour les fuites sont interdits");
+            throw new IllegalArgumentException("Débit des robinets illégaux");
+        }
+        if (!checkDebitArray(debitFuite)){
+            LOG.severe("Les débits fourni pour les fuites sont interdits");
+            throw new IllegalArgumentException("Débit des fuites illégaux");
+        }
+
+        this.debitRobinet = debitRobinet;
+        this.debitFuite = debitFuite;
+
     }
 
 
     @FXML
     void demarrerArreter(){
-        LOG.info("");
+        btn_demarrerArreter.setDisable(true);
+
+        if (simulationEnCours) {
+            LOG.info("Arret de la simulation");
+            simulationEnCours = false;
+            java.time.Duration duration = java.time.Duration.between(top, Instant.now());
+            System.out.println("Arret de la simulation après : " + duration.toMillis() + "ms");
+
+            for (int i = 0; i < MAX_INOUT; i++) {
+                if (fuites[i] != null) {fuites[i].cancel();}
+                if (robinets[i] != null) {robinets[i].cancel();}
+            }
+
+            btn_demarrerArreter.setText("Demarrer simulation");
+
+        } else {
+            //Initialisation
+            LOG.info("Demarrage de la simulation");
+            top = Instant.now();
+            simulationEnCours = true;
+            baignoire.vider();
+            eauBaignoire.setHeight(0.0);
+
+            setDisplayInOut();
+
+            //On defini les robinets
+            robinets = new Robinet[MAX_INOUT];
+            for (int i = 0; i < debitRobinet.length; i++) {
+                Robinet robinet = new Robinet(baignoire, debitRobinet[i]);
+                robinet.setOnSucceeded((WorkerStateEvent e) -> {
+                    //On met a jour l'affichage
+                    LOG.info("Robinet deverse");
+                    eauBaignoire.setHeight(baignoire.getVolume());
+
+                    //Si la baignoire pleine on arrete tout
+                    if (baignoire.estPlein()){
+                        java.time.Duration duration = java.time.Duration.between(top, Instant.now());
+                        System.out.println("Temps de remplissage : " + duration.toMillis() + "ms");
+                        robinet.cancel();
+                    }
+                });
+                robinets[i] = robinet;
+                robinet.setPeriod(Duration.millis(1000));
+            }
+
+            //On defini les robinets
+            fuites = new Fuite[MAX_INOUT];
+            for (int i = 0; i < debitFuite.length; i++) {
+                Fuite fuite = new Fuite(baignoire, debitFuite[i]);
+                fuite.setOnSucceeded((WorkerStateEvent e) -> {
+                    LOG.info("Fuite vide");
+                    eauBaignoire.setHeight(baignoire.getVolume());
+                });
+
+                fuite.setPeriod(Duration.millis(1000));
+                fuites[i] = fuite;
+            }
+
+            //On demarre la simulation
+            for (int i = 0; i < MAX_INOUT; i++) {
+                if (fuites[i] != null) {fuites[i].start();}
+                if (robinets[i] != null) {robinets[i].start();}
+            }
+
+            btn_demarrerArreter.setText("Arreter simulation");
+
+        }
+        btn_demarrerArreter.setDisable(false);
     }
 
 
@@ -107,6 +204,41 @@ public class BaignoireController {
     @FXML
     void reglageRobinet(ActionEvent event){
         System.out.println("reglage robinet" + tf_reglageRobinet1.getText() + tf_reglageRobinet2.getText() + tf_reglageRobinet3.getText() + tf_reglageRobinet4.getText());
+    }
+
+
+    private boolean checkDebitArray(int[] debits) {
+        if (debits.length > MAX_INOUT) return false;
+        for (int debit: debits) {
+            if (debit < 0.0) return false;
+        }
+        return true;
+    }
+
+    private void setDisplayInOut() {
+        //robinets
+        setVisibilityInOut(robinet1, robinet2, robinet3, robinet4, debitRobinet);
+        //fuites
+        setVisibilityInOut(fuite1, fuite2, fuite3, fuite4, debitFuite);
+    }
+
+    private void setVisibilityInOut(Pane pane1, Pane pane2, Pane pane3, Pane pane4, int[] debits) {
+        pane1.setVisible(true);
+        pane2.setVisible(true);
+        pane3.setVisible(true);
+        pane4.setVisible(true);
+        switch (debits.length){
+            case 0:
+                pane1.setVisible(false);
+            case 1 :
+                pane2.setVisible(false);
+            case 2 :
+                pane3.setVisible(false);
+            case 3 :
+                pane4.setVisible(false);
+            case 4:
+                //Nothing
+        }
     }
 
 }

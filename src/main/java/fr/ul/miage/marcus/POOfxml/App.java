@@ -28,7 +28,7 @@ public class App extends Application {
         primaryStage.setTitle("Exercice JavaFX : Hello");
         try {
             FXMLLoader loader =new FXMLLoader(getClass().getResource("/baignoire.fxml"));
-            loader.setControllerFactory(c-> new BaignoireController(fichier));
+            loader.setControllerFactory(c-> new BaignoireController(100, new int[]{1, 1, 1, 1}, new int[]{1, 1, 1, 1}));
             Parent root = loader.load();
             Scene scene = new Scene(root);
             primaryStage.setScene(scene);
