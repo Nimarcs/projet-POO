@@ -188,10 +188,18 @@ public class BaignoireController {
                     eauBaignoire.setHeight(baignoire.getVolume());
 
                     //Si la baignoire pleine on arrete tout
-                    if (baignoire.estPlein()){
+                    if (baignoire.estPlein() && simulationEnCours){
+                        //On termine la simulation
+                        simulationEnCours = false;
+
                         java.time.Duration duration = java.time.Duration.between(top, Instant.now());
                         System.out.println("Temps de remplissage : " + duration.toMillis() + "ms");
-                        robinet.cancel();
+
+                        //On arrete tout
+                        for (int j = 0; j < MAX_INOUT; j++) {
+                            if (fuites[j] != null) {fuites[j].cancel();}
+                            if (robinets[j] != null) {robinets[j].cancel();}
+                        }
                     }
                 });
                 robinets[i] = robinet;
@@ -230,8 +238,14 @@ public class BaignoireController {
 
     @FXML
     void reglageRobinet(){
-        //btn_reglageRobinet
         System.out.println("reglage robinet" + tf_reglageRobinet1.getText() + tf_reglageRobinet2.getText() + tf_reglageRobinet3.getText() + tf_reglageRobinet4.getText());
+        try {
+
+
+
+        } catch (IllegalArgumentException ignored){
+            afficheErreur("Valeur d'un des robinets erronée");
+        }
     }
 
     @FXML
@@ -264,7 +278,9 @@ public class BaignoireController {
 
     private double recupereDouble(TextField textField) throws NumberFormatException{
         try {
-            return Double.parseDouble(textField.getText());
+            String text = textField.getText();
+            if (text.isBlank()) text = "0";
+            return Double.parseDouble(text);
         } catch (NumberFormatException e) {
             LOG.severe(String.format("%s - INPUT ERROR - expected a number got %s",textField.getId(), textField.getText()));
             throw e;
