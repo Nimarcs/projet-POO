@@ -8,6 +8,7 @@
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -101,9 +102,13 @@
                             </bottom>
                             <center>
                                 <BorderPane fx:id="baignoirePane" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-                                    <bottom>
-                                        <Rectangle fx:id="eauBaignoire" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="27.0" stroke="BLACK" strokeType="INSIDE" styleClass="widthEau" width="10.0" BorderPane.alignment="BOTTOM_CENTER" />
-                                    </bottom>
+                           <bottom>
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefWidth="0.0" style="-fx-background-color: lightblue;" BorderPane.alignment="CENTER">
+                                 <children>
+                                              <Rectangle fx:id="eauBaignoire" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" stroke="BLACK" strokeType="INSIDE" styleClass="widthEau" />
+                                 </children>
+                              </AnchorPane>
+                           </bottom>
                                 </BorderPane>
                             </center>
                         </BorderPane>
