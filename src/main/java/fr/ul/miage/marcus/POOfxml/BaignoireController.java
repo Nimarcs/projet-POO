@@ -329,6 +329,8 @@ public class BaignoireController {
                 }
             }
 
+            regleVisibiliteEntreSortieEau();
+
             afficheInformation("Les robinets ont bien été mis à jour");
 
         } catch (IllegalArgumentException ignored) {
