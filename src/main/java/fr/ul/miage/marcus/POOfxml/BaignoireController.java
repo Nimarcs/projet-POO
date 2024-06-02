@@ -36,8 +36,6 @@ public class BaignoireController {
     @FXML
     private LineChart<Number, Number> linechart;
 
-    private XYChart.Series<Number, Number> seriesLineChart;
-
     @FXML
     private Rectangle eauBaignoire;
 
@@ -133,8 +131,6 @@ public class BaignoireController {
 
     private final Baignoire baignoire;
 
-    private static List<String[]> listeExport;
-
     private boolean simulationEnCours;
 
     private double[] debitRobinet, debitFuite;
@@ -157,14 +153,11 @@ public class BaignoireController {
         this.debitRobinet = debitRobinet;
         this.debitFuite = debitFuite;
 
-        seriesLineChart = new XYChart.Series<>();
-        seriesLineChart.setName("Remplisage baignoire");
         NumberAxis axeX = new NumberAxis();
         axeX.setLabel("Temps");
         NumberAxis axeY = new NumberAxis();
         axeY.setLabel("Volume");
         linechart = new LineChart<>(axeX, axeY);
-
 
     }
 
@@ -186,12 +179,10 @@ public class BaignoireController {
             baignoire.vider();
             eauBaignoire.setHeight(0.0);
             top = Instant.now();
+            baignoire.setTop(top);
 
             linechart.getData().clear();
-            seriesLineChart.getData().clear();
-            linechart.getData().add(seriesLineChart);
-
-            listeExport = new ArrayList<>();
+            linechart.getData().add(baignoire.getXySeries());
 
             mettreAJourAffichageBouton(simulationEnCours);
 
@@ -212,10 +203,7 @@ public class BaignoireController {
                 Fuite fuite = new Fuite(baignoire, debitFuite[i]);
                 fuite.setOnSucceeded((WorkerStateEvent e) -> {
                     LOG.info("Fuite vide");
-                    java.time.Duration tempsDepuisDepart = java.time.Duration.between(top, Instant.now());
-                    linechart.getData().get(0).getData().add(new XYChart.Data<>(tempsDepuisDepart.toMillis(), baignoire.getVolume()));
-                    listeExport.add(new String[]{String.valueOf(tempsDepuisDepart.toMillis()), String.valueOf(baignoire.getVolume())});
-                    mettreAJourBaignoire();
+                   mettreAJourBaignoire();
 
                 });
 
@@ -323,7 +311,8 @@ public class BaignoireController {
     public void exporterCSV() {
         try {
             CSVWriter writer = new CSVWriter(new FileWriter("export.csv"));
-            writer.writeAll(listeExport);
+            writer.writeAll(baignoire.getListeExport());
+            writer.close();
 
             afficheInformation("Sauvegarde de l'export réussite");
 
@@ -341,9 +330,7 @@ public class BaignoireController {
         Robinet robinet = new Robinet(baignoire, debit);
         robinet.setOnSucceeded((WorkerStateEvent e) -> {
             LOG.info("Robinet deverse");
-            java.time.Duration tempsDepuisDepart = java.time.Duration.between(top, Instant.now());
-            linechart.getData().get(0).getData().add(new XYChart.Data<>(tempsDepuisDepart.toMillis(), baignoire.getVolume()));
-            listeExport.add(new String[]{String.valueOf(tempsDepuisDepart.toMillis()), String.valueOf(baignoire.getVolume())});
+
             //On met a jour l'affichage
             mettreAJourBaignoire();
 
@@ -388,13 +375,12 @@ public class BaignoireController {
         }
     }
 
-    private boolean verifieDebitArray(double[] debits) throws IllegalArgumentException {
+    private void verifieDebitArray(double[] debits) throws IllegalArgumentException {
         if (debits.length != MAX_INOUT)
             throw new IllegalArgumentException("La liste de debit par default doit faire une longueur de 5");
         for (double debit : debits) {
             if (debit < 0.0) throw new IllegalArgumentException("Les debits doivent être positif");
         }
-        return true;
     }
 
     private void regleVisibiliteEntreSortieEau() {
