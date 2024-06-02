@@ -3,9 +3,11 @@ package fr.ul.miage.marcus.POOfxml;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -26,8 +28,10 @@ public class BaignoireController {
     public static final int VITESSE = 1000;
 
 
-//    @FXML
-//    public LineChart linechart;
+    @FXML
+    private LineChart<Number, Number> linechart;
+
+    private XYChart.Series<Number, Number> seriesLineChart;
 
     @FXML
     private Rectangle eauBaignoire;
@@ -117,6 +121,9 @@ public class BaignoireController {
     private Button btn_reglageCapacite;
 
     @FXML
+    private Button btn_exporterCSV;
+
+    @FXML
     private Text txt_boucherFuite;
 
     private Baignoire baignoire;
@@ -143,6 +150,16 @@ public class BaignoireController {
         this.debitRobinet = debitRobinet;
         this.debitFuite = debitFuite;
 
+        seriesLineChart = new XYChart.Series<Number, Number>();
+        seriesLineChart.setName("Remplisage baignoire");
+        NumberAxis axeX = new NumberAxis();
+        axeX.setLabel("Temps");
+        NumberAxis axeY = new NumberAxis();
+        axeY.setLabel("Volume");
+        linechart = new LineChart<Number, Number>(axeX, axeY);
+        linechart.getData().add(seriesLineChart);
+
+
     }
 
 
@@ -151,20 +168,20 @@ public class BaignoireController {
      */
 
     @FXML
-    void demarrerArreter(){
+    void demarrerArreter() {
         btn_demarrerArreter.setDisable(true);
 
         if (simulationEnCours) {
             terminerSimulation();
-        }
-        else
-        {
+        } else {
             //Initialisation
             LOG.info("Demarrage de la simulation");
             top = Instant.now();
             simulationEnCours = true;
             baignoire.vider();
             eauBaignoire.setHeight(0.0);
+
+            linechart.getData().add(seriesLineChart);
 
             mettreAJourAffichageBouton(simulationEnCours);
 
@@ -184,6 +201,8 @@ public class BaignoireController {
                 Fuite fuite = new Fuite(baignoire, debitFuite[i]);
                 fuite.setOnSucceeded((WorkerStateEvent e) -> {
                     LOG.info("Fuite vide");
+                    java.time.Duration tempsDepuisDepart = java.time.Duration.between(top, Instant.now());
+                    linechart.getData().get(0).getData().add(new XYChart.Data<>(tempsDepuisDepart.toMillis(), baignoire.getVolume()));
                     mettreAJourBaignoire();
 
                 });
@@ -194,8 +213,12 @@ public class BaignoireController {
 
             //On demarre la simulation
             for (int i = 0; i < MAX_INOUT; i++) {
-                if (fuites[i] != null) {fuites[i].start();}
-                if (robinets[i] != null) {robinets[i].start();}
+                if (fuites[i] != null) {
+                    fuites[i].start();
+                }
+                if (robinets[i] != null) {
+                    robinets[i].start();
+                }
             }
 
             btn_demarrerArreter.setText("Arreter simulation");
@@ -205,7 +228,7 @@ public class BaignoireController {
     }
 
     @FXML
-    void reparerFuite(ActionEvent event){
+    void reparerFuite(ActionEvent event) {
         int indiceFuite = switch (((Button) event.getSource()).getId()) {
             case "btn_fuite1" -> 0;
             case "btn_fuite2" -> 1;
@@ -223,7 +246,7 @@ public class BaignoireController {
     }
 
     @FXML
-    void reglageRobinet(){
+    void reglageRobinet() {
         try {
 
             debitRobinet = new double[]{recupereDouble(tf_reglageRobinet1), recupereDouble(tf_reglageRobinet2), recupereDouble(tf_reglageRobinet3), recupereDouble(tf_reglageRobinet4)};
@@ -260,18 +283,18 @@ public class BaignoireController {
 
             afficheInformation("Les robinets ont bien été mis à jour");
 
-        } catch (IllegalArgumentException ignored){
+        } catch (IllegalArgumentException ignored) {
             afficheErreur("Valeur d'un des robinets erronée");
         }
     }
 
     @FXML
-    void reglageFuite(){
+    void reglageFuite() {
 
         if (simulationEnCours)
             afficheErreur("On ne peut pas parametrer les fuites en cours de route");
 
-        debitFuite= new double[]{recupereDouble(tf_reglageFuite1), recupereDouble(tf_reglageFuite2), recupereDouble(tf_reglageFuite3), recupereDouble(tf_reglageFuite4)};
+        debitFuite = new double[]{recupereDouble(tf_reglageFuite1), recupereDouble(tf_reglageFuite2), recupereDouble(tf_reglageFuite3), recupereDouble(tf_reglageFuite4)};
         afficheInformation("Les fuites ont bien été mise à jour");
     }
 
@@ -287,10 +310,20 @@ public class BaignoireController {
             baignoire.setCapacite(nouvelleCapacite);
             LOG.info("Nouvelle capacité de la baignoire : " + nouvelleCapacite);
             afficheInformation("Capacité de la baignoire changée");
-        } catch (IllegalArgumentException ignored){
+        } catch (IllegalArgumentException ignored) {
             afficheErreur("Valeur de la capacité invalide");
             // On ne met pas à jour
         }
+    }
+
+    @FXML
+    public void exporterCSV() {
+
+    }
+
+    @FXML
+    public void rafraichirGraphique() {
+        LOG.info("Rafraichissement du graphique");
     }
 
 
@@ -300,12 +333,14 @@ public class BaignoireController {
     private Robinet creerRobinet(double debit) {
         Robinet robinet = new Robinet(baignoire, debit);
         robinet.setOnSucceeded((WorkerStateEvent e) -> {
-            //On met a jour l'affichage
             LOG.info("Robinet deverse");
+            java.time.Duration tempsDepuisDepart = java.time.Duration.between(top, Instant.now());
+            linechart.getData().get(0).getData().add(new XYChart.Data<Number, Number>((Number) tempsDepuisDepart.toMillis(), (Number) baignoire.getVolume()));
+            //On met a jour l'affichage
             mettreAJourBaignoire();
 
             //Si la baignoire pleine on arrete tout
-            if (baignoire.estPlein() && simulationEnCours){
+            if (baignoire.estPlein() && simulationEnCours) {
                 terminerSimulation();
             }
         });
@@ -320,8 +355,12 @@ public class BaignoireController {
         System.out.println("Arret de la simulation après : " + duration.toMillis() + "ms");
 
         for (int i = 0; i < MAX_INOUT; i++) {
-            if (fuites[i] != null) {fuites[i].cancel();}
-            if (robinets[i] != null) {robinets[i].cancel();}
+            if (fuites[i] != null) {
+                fuites[i].cancel();
+            }
+            if (robinets[i] != null) {
+                robinets[i].cancel();
+            }
         }
 
         btn_demarrerArreter.setText("Demarrer simulation");
@@ -330,20 +369,21 @@ public class BaignoireController {
     }
 
 
-    private double recupereDouble(TextField textField) throws NumberFormatException{
+    private double recupereDouble(TextField textField) throws NumberFormatException {
         try {
             String text = textField.getText();
             if (text.isBlank()) text = "0";
             return Double.parseDouble(text);
         } catch (NumberFormatException e) {
-            LOG.severe(String.format("%s - INPUT ERROR - expected a number got %s",textField.getId(), textField.getText()));
+            LOG.severe(String.format("%s - INPUT ERROR - expected a number got %s", textField.getId(), textField.getText()));
             throw e;
         }
     }
 
-    private boolean verifieDebitArray(double[] debits) throws IllegalArgumentException{
-        if (debits.length != MAX_INOUT) throw new IllegalArgumentException("La liste de debit par default doit faire une longueur de 5");
-        for (double debit: debits) {
+    private boolean verifieDebitArray(double[] debits) throws IllegalArgumentException {
+        if (debits.length != MAX_INOUT)
+            throw new IllegalArgumentException("La liste de debit par default doit faire une longueur de 5");
+        for (double debit : debits) {
             if (debit < 0.0) throw new IllegalArgumentException("Les debits doivent être positif");
         }
         return true;
@@ -362,14 +402,14 @@ public class BaignoireController {
         pane2.setVisible(true);
         pane3.setVisible(true);
         pane4.setVisible(true);
-        switch (Arrays.stream(debits).filter((elem) -> elem != 0).toArray().length){
+        switch (Arrays.stream(debits).filter((elem) -> elem != 0).toArray().length) {
             case 0:
                 pane1.setVisible(false);
-            case 1 :
+            case 1:
                 pane2.setVisible(false);
-            case 2 :
+            case 2:
                 pane3.setVisible(false);
-            case 3 :
+            case 3:
                 pane4.setVisible(false);
             case 4:
                 //Nothing
@@ -408,7 +448,7 @@ public class BaignoireController {
         double maxHeight = baignoirePane.getHeight();
         double capacity = baignoire.getCapacite();
         double volume = baignoire.getVolume();
-        eauBaignoire.setHeight((volume*maxHeight)/capacity);
+        eauBaignoire.setHeight((volume * maxHeight) / capacity);
         // On fait un produit en crois pour que ça complete tout le temps la baignoire
     }
 }

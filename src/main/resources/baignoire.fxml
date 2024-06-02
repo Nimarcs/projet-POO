@@ -226,17 +226,24 @@
                 </GridPane>
             </content>
         </Tab>
-        <Tab text="Graphique">
-            <content>
-                <LineChart fx:id="linechart" minWidth="0.0">
-                    <xAxis>
-                        <CategoryAxis side="BOTTOM" />
-                    </xAxis>
-                    <yAxis>
-                        <NumberAxis side="LEFT" />
-                    </yAxis>
-                </LineChart>
-            </content>
+        <Tab fx:id="graphique" onSelectionChanged="#rafraichirGraphique" text="Graphique">
+         <content>
+            <BorderPane prefHeight="200.0" prefWidth="200.0">
+               <center>
+                      <LineChart fx:id="linechart" minWidth="0.0" BorderPane.alignment="CENTER">
+                          <xAxis>
+                              <NumberAxis side="BOTTOM" />
+                          </xAxis>
+                          <yAxis>
+                              <NumberAxis side="LEFT" />
+                          </yAxis>
+                      </LineChart>
+               </center>
+               <bottom>
+                  <Button fx:id="btn_exporterCSV" mnemonicParsing="false" onAction="#exporterCSV" text="Exporter en csv" BorderPane.alignment="CENTER" />
+               </bottom>
+            </BorderPane>
+         </content>
         </Tab>
     </tabs>
 </TabPane>
