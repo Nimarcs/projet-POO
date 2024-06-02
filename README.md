@@ -33,7 +33,7 @@ Testé pour java 17.
 Lancez avec "./bindist/bin/baignoire"
 
 ### Avec un jar
-Lancez le jar dans target avec "java -jar POOProjet-<Num_Version>.jar"
+Lancez le jar dans target avec les librairies javafx
 
 ## Conception de l'architecture :
 ![diagramme de classe avec dépendence](ressources/diagrammeClasse.png)
