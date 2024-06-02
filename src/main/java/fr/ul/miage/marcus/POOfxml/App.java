@@ -37,7 +37,7 @@ public class App extends Application {
         primaryStage.setTitle("Exercice JavaFX : Hello");
         try {
             FXMLLoader loader =new FXMLLoader(getClass().getResource("/baignoire.fxml"));
-            loader.setControllerFactory(c-> new BaignoireController(50, new double[]{10, 10, 0, 0}, new double[]{5, 9, 6, 0}));
+            loader.setControllerFactory(c-> new BaignoireController(50, new double[]{10, 10, 0, 0}, new double[]{5, 9, 3, 0}));
             Parent root = loader.load();
             Scene scene = new Scene(root);
             primaryStage.setScene(scene);
@@ -50,15 +50,11 @@ public class App extends Application {
 
     /**
      * Mathode principale qui va traiter les arguments fourni au lancement
-     * @param args
+     * @param args argument fourni au lancement de l'application (-h pour plus d'information)
      */
     public static void main(String[] args){
-        //arguments
-        String fprenoms = "samples/prenoms.txt";
         //syntaxe
         Options options = new Options();
-        Option f = new Option("f", "file", true, "fichier des prénoms");
-        options.addOption(f);
         Option d = new Option("d", "debug", false, "mode debug");
         options.addOption(d);
         //parse
@@ -69,13 +65,10 @@ public class App extends Application {
                 currentLogLevel = Level.INFO;
             }
             LOG.setLevel(currentLogLevel);
-            if (line.hasOption("f")) {
-                fprenoms = line.getOptionValue('f');
-            }
         } catch (Exception exp) {
             LOG.severe("Erreur dans la ligne de commande");
             HelpFormatter formatter = new HelpFormatter();
-            formatter.printHelp("hello", options);
+            formatter.printHelp("baignoire", options);
             System.exit(1);
         }
         //process

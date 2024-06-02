@@ -25,6 +25,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 
+/**
+ * @author Marcus Richier
+ * Controleur de l'application, gère les actions à effectuer lors d'interaction avec l'interface
+ */
 public class BaignoireController {
 
     /*

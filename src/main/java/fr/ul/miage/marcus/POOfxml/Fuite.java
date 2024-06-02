@@ -5,6 +5,10 @@ import javafx.concurrent.Task;
 
 import java.util.logging.Logger;
 
+/**
+ * @author Marcus Richier
+ * Représente une fuite dans la baignoire
+ */
 public class Fuite extends ScheduledService<Baignoire> {
 
     public static final Logger LOG = Logger.getLogger(Fuite.class.getName());

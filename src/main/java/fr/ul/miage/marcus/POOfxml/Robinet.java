@@ -5,6 +5,10 @@ import javafx.concurrent.Task;
 
 import java.util.logging.Logger;
 
+/**
+ * @author Marcus Richier
+ * Représente un robinet qui s'écoule dans la baignoire
+ */
 public class Robinet extends ScheduledService<Baignoire> {
 
     public static final Logger LOG = Logger.getLogger(Robinet.class.getName());

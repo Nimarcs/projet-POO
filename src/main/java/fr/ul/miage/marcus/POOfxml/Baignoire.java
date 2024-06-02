@@ -9,6 +9,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 
+/**
+ * @author Marcus Richier
+ * Classe qui représente une baignoire pour une simulation de flux d'eau
+ */
 public class Baignoire {
 
     /**
