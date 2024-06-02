@@ -1,4 +1,4 @@
-package fr.ul.miage.marcus.POOfxml;
+package fr.ul.miage.marcus.POOProjet;
 
 import javafx.application.Platform;
 import javafx.scene.chart.XYChart;

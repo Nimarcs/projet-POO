@@ -1,5 +1,5 @@
 
-package fr.ul.miage.marcus.POOfxml;
+package fr.ul.miage.marcus.POOProjet;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

@@ -1,4 +1,4 @@
-package fr.ul.miage.marcus.POOfxml;
+package fr.ul.miage.marcus.POOProjet;
 
 import javafx.concurrent.ScheduledService;
 import javafx.concurrent.Task;
@@ -7,20 +7,19 @@ import java.util.logging.Logger;
 
 /**
  * @author Marcus Richier
- * Représente une fuite dans la baignoire
+ * Représente un robinet qui s'écoule dans la baignoire
  */
-public class Fuite extends ScheduledService<Baignoire> {
+public class Robinet extends ScheduledService<Baignoire> {
 
-    public static final Logger LOG = Logger.getLogger(Fuite.class.getName());
+    public static final Logger LOG = Logger.getLogger(Robinet.class.getName());
 
     /**
-     * Debit par default de la fuite
+     * Debit par default du robinet
      */
     private static final double DEFAUT_DEBIT = 10;
 
-
     /**
-     * Baignoire associée
+     * Baignoire associée a ce robinet
      */
     private final Baignoire baignoire;
 
@@ -29,29 +28,27 @@ public class Fuite extends ScheduledService<Baignoire> {
      */
     private double debit;
 
-
     /**
-     * Contructeur de fuite
-     * @param baignoire baignoire associée à la fuite
+     * Contructeur de robinet
+     * @param baignoire baignoire associée
      */
-    public Fuite(Baignoire baignoire){
-        super();
+    public Robinet(Baignoire baignoire){
         LOG.setLevel(App.currentLogLevel);
         this.baignoire = baignoire;
+        this.debit = DEFAUT_DEBIT;
     }
 
     /**
-     * Contrcuteur de fuite avec un debit precis
-     * @param baignoire baignoire associée à la fuite
-     * @param debit debit de la fuite
+     * Constructeur de robinet avec un débit précis
+     * @param baignoire baignoire associée
+     * @param debit debit du robinet
      */
-    public Fuite(Baignoire baignoire, double debit){
+    public Robinet(Baignoire baignoire, double debit){
         this(baignoire);
-        if (checkDebit(debit))
+        if (checkDebit(debit)){
             this.debit = debit;
-        else
-            LOG.severe("La valeur de débit est interdite lors de la creation de la fuite, la valeur par défaut va donc être attribué");
-
+        } else
+            LOG.severe("La valeur de débit est interdite lors de la creation du robinet, la valeur par défaut va donc être attribué");
     }
 
     /**
@@ -64,7 +61,7 @@ public class Fuite extends ScheduledService<Baignoire> {
             @Override
             protected Baignoire call() {
                 synchronized (baignoire){
-                    baignoire.retirerEau(debit);
+                    baignoire.ajouterEau(debit);
                     return baignoire;
                 }
             }
@@ -72,18 +69,22 @@ public class Fuite extends ScheduledService<Baignoire> {
     }
 
     /**
-     * Getter du debit de la fuite
-     * @return debit de la fuite
+     * Getter du débit
+     * @return debit du robinet
      */
     public double getDebit() {
         return debit;
     }
 
     /**
-     * Methode qui rebouche la fuite
+     * Setter du debit
+     * @param debit debit à définir
      */
-    public void boucher(){
-        this.debit = 0.0;
+    public void setDebit(double debit) {
+        if (checkDebit(debit))
+            this.debit = debit;
+        else
+            LOG.severe("Le debit doit être positif, changement ignoré");
     }
 
     /**
