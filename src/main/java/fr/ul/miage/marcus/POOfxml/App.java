@@ -13,33 +13,45 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class App extends Application {
-    //Création d'un logger
+    /**
+     * Création d'un logger
+     */
     private static final Logger LOG = Logger.getLogger(App.class.getName());
 
+    /*
+    Attributs
+     */
+
+    /**
+     * Niveau de LOG de l'application est utilisé par les autres classe pour se mettre au niveau
+     */
     public static Level currentLogLevel = Level.WARNING;
 
-    //Attribut
-    private static Baignoire hello = null;
-
-    private static String fichier = null;
-
+    /**
+     * Méthode appelé au début de l'application par JavaFX
+     * @param primaryStage Le Stage fournit par JavaFX dans lequel notre application doit se trouver
+     * @throws IllegalArgumentException Dans le cas ou il y a une erreur sur la définition des paramètres par défaut
+     */
     @Override
     public void start(Stage primaryStage) throws IllegalArgumentException{
         primaryStage.setTitle("Exercice JavaFX : Hello");
         try {
             FXMLLoader loader =new FXMLLoader(getClass().getResource("/baignoire.fxml"));
-            loader.setControllerFactory(c-> new BaignoireController(100, new double[]{1, 1, 1, 1}, new double[]{1, 1, 1, 1}));
+            loader.setControllerFactory(c-> new BaignoireController(50, new double[]{10, 10, 0, 0}, new double[]{5, 9, 6, 0}));
             Parent root = loader.load();
             Scene scene = new Scene(root);
             primaryStage.setScene(scene);
             primaryStage.show();
         } catch (IOException e) {
-            //TODO Auto-generated catch block
+            LOG.severe("Erreur lors de la lecture du .fxml");
             e.printStackTrace();
         }
     }
 
-
+    /**
+     * Mathode principale qui va traiter les arguments fourni au lancement
+     * @param args
+     */
     public static void main(String[] args){
         //arguments
         String fprenoms = "samples/prenoms.txt";
@@ -66,10 +78,8 @@ public class App extends Application {
             formatter.printHelp("hello", options);
             System.exit(1);
         }
-        hello = new Baignoire();
         //process
         LOG.info("Démarrage du traitement");
-        fichier = fprenoms;
         launch(args);
         LOG.info("Fin du traitement");
     }

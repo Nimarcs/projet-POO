@@ -5,7 +5,7 @@ On définit un nombre de robinets et de fuite < 4 puis on lance la simulation
 On peut changer le débit de chaque robinet et supprimer certaines fuites
 Lorsque la baignoire est remplie, on arrête la simulation et affiche le temps pris et l'eau gaspillé.
 Ce projet est censé prendre un temps d'environ : 8h
-Ce projet à pris un temps de : 2h15
+Ce projet à pris un temps de : 8h15
 
 ![Screenshot de l application](ressources/app.png)
 
@@ -28,9 +28,6 @@ Testé pour java 17.
 ## Utilisation :
 
 - Lancez avec "./bindist/bin/hello"
-
-## Algorithme utilisé :
-- Distance de Levenshtein
 
 ## Conception de l'architecture :
 ![diagramme de classe avec dépendence](ressources/Diagramme_de_classe-dependences.png)
