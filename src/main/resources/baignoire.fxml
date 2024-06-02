@@ -226,7 +226,7 @@
                 </GridPane>
             </content>
         </Tab>
-        <Tab fx:id="graphique" onSelectionChanged="#rafraichirGraphique" text="Graphique">
+        <Tab fx:id="graphique" text="Graphique">
          <content>
             <BorderPane prefHeight="200.0" prefWidth="200.0">
                <center>

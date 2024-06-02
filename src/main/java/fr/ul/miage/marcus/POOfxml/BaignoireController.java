@@ -1,5 +1,6 @@
 package fr.ul.miage.marcus.POOfxml;
 
+import com.opencsv.CSVWriter;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -16,8 +17,12 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Logger;
 
 public class BaignoireController {
@@ -126,7 +131,9 @@ public class BaignoireController {
     @FXML
     private Text txt_boucherFuite;
 
-    private Baignoire baignoire;
+    private final Baignoire baignoire;
+
+    private static List<String[]> listeExport;
 
     private boolean simulationEnCours;
 
@@ -183,6 +190,8 @@ public class BaignoireController {
             seriesLineChart.getData().clear();
             linechart.getData().add(seriesLineChart);
 
+            listeExport = new ArrayList<>();
+
             mettreAJourAffichageBouton(simulationEnCours);
 
             regleVisibiliteEntreSortieEau();
@@ -203,6 +212,7 @@ public class BaignoireController {
                     LOG.info("Fuite vide");
                     java.time.Duration tempsDepuisDepart = java.time.Duration.between(top, Instant.now());
                     linechart.getData().get(0).getData().add(new XYChart.Data<>(tempsDepuisDepart.toMillis(), baignoire.getVolume()));
+                    listeExport.add(new String[]{String.valueOf(tempsDepuisDepart.toMillis()), String.valueOf(baignoire.getVolume())});
                     mettreAJourBaignoire();
 
                 });
@@ -320,12 +330,16 @@ public class BaignoireController {
 
     @FXML
     public void exporterCSV() {
+        try {
+            CSVWriter writer = new CSVWriter(new FileWriter("export.csv"));
+            writer.writeAll(listeExport);
 
-    }
+            afficheInformation("Sauvegarde de l'export réussite");
 
-    @FXML
-    public void rafraichirGraphique() {
-        LOG.info("Rafraichissement du graphique");
+        } catch (IOException e) {
+            e.printStackTrace();
+            afficheErreur("Erreur lors de l'export en CSV");
+        }
     }
 
 
@@ -338,6 +352,7 @@ public class BaignoireController {
             LOG.info("Robinet deverse");
             java.time.Duration tempsDepuisDepart = java.time.Duration.between(top, Instant.now());
             linechart.getData().get(0).getData().add(new XYChart.Data<>(tempsDepuisDepart.toMillis(), baignoire.getVolume()));
+            listeExport.add(new String[]{String.valueOf(tempsDepuisDepart.toMillis()), String.valueOf(baignoire.getVolume())});
             //On met a jour l'affichage
             mettreAJourBaignoire();
 
