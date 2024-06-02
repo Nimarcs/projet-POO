@@ -1,0 +1,127 @@
+@startuml
+package fr.ul.miage.marcus.POOProjet {
+
+    class Baignoire {
+        + static final Logger LOG
+        + static final double CAPACITE_PAR_DEFAUT
+        - XYChart.Series<Number, Number> xySeries
+        - List<String[]> listeExport
+        - Instant top
+        - double capacite
+        - double volume
+
+        + Baignoire()
+        + Baignoire(double capacite)
+        + synchronized void ajouterEau(double eau)
+        + synchronized void retirerEau(double eau)
+        + boolean estPlein(double volume)
+        + boolean estPlein()
+        + boolean estVide(double volume)
+        + boolean estVide()
+        + void setCapacite(double capacite)
+        + double getVolume()
+        + double getCapacite()
+        + void vider()
+        + void setTop(Instant top)
+        + List<String[]> getListeExport()
+        + XYChart.Series<Number, Number> getXySeries()
+        - void ajouterNouvelleValeurDansGraphiques()
+    }
+
+    class BaignoireController {
+      - static final Logger LOG
+      - static final int MAX_INOUT
+      - static final int VITESSE
+      - LineChart<Number, Number> linechart
+      - Rectangle eauBaignoire
+      - BorderPane baignoirePane
+      - Pane robinet1
+      - Pane robinet2
+      - Pane robinet3
+      - Pane robinet4
+      - Pane fuite1
+      - Pane fuite2
+      - Pane fuite3
+      - Pane fuite4
+      - TextField tf_reglageRobinet1
+      - TextField tf_reglageRobinet2
+      - TextField tf_reglageRobinet3
+      - TextField tf_reglageRobinet4
+      - TextField tf_reglageFuite1
+      - TextField tf_reglageFuite2
+      - TextField tf_reglageFuite3
+      - TextField tf_reglageFuite4
+      - TextField tf_capacity
+      - Button btn_fuite1
+      - Button btn_fuite2
+      - Button btn_fuite3
+      - Button btn_fuite4
+      - Button btn_demarrerArreter
+      - Button btn_reglageFuite
+      - Button btn_reglageCapacite
+      - Text txt_boucherFuite
+      - final Baignoire baignoire
+      - boolean simulationEnCours
+      - double[] debitRobinet
+      - double[] debitFuite
+      - Instant top
+      - Robinet[] robinets
+      - Fuite[] fuites
+      + BaignoireController(double capacite, double[] debitRobinet, double[] debitFuite)
+      + void demarrerArreter()
+      + void reparerFuite(ActionEvent event)
+      + void reglageRobinet()
+      + void reglageFuite()
+      + void reglageCapacite()
+      + void exporterCSV()
+      - Robinet creerRobinet(double debit)
+      - void terminerSimulation()
+      - double recupereDouble(TextField textField)
+      - void verifieDebitArray(double[] debits)
+      - void regleVisibiliteEntreSortieEau()
+      - void regleVisibiliteEntreSortieEau(Pane pane1, Pane pane2, Pane pane3, Pane pane4, double[] debits)
+      - void afficheErreur(String message)
+      - void afficheInformation(String message)
+      - void mettreAJourAffichageBouton(boolean simulationEnCours)
+      - void mettreAJourBaignoire()
+    }
+
+    class Fuite {
+        - static final Logger LOG
+        - static final double DEFAUT_DEBIT
+        - final Baignoire baignoire
+        - double debit
+
+        + Fuite(Baignoire baignoire)
+        + Fuite(Baignoire baignoire, double debit)
+        + double getDebit()
+        + void boucher()
+        - boolean checkDebit(double debit)
+        # Task<Baignoire> createTask()
+    }
+
+    class Robinet {
+        - static final Logger LOG
+        - static final double DEFAUT_DEBIT
+        - final Baignoire baignoire
+        - double debit
+        + Robinet(baignoire: Baignoire)
+        + Robinet(baignoire: Baignoire, debit: double)
+        + createTask(): Task<Baignoire>
+        + getDebit(): double
+        + setDebit(debit: double): void
+        - checkDebit(debit: double): boolean
+    }
+
+    class "ScheduledService<Baignoire>"
+
+    Robinet --|> "ScheduledService<Baignoire>"
+    Fuite --> "final" Baignoire
+    Robinet --> "final" Baignoire
+    Fuite --|> "ScheduledService<Baignoire>"
+    BaignoireController --> "1" Baignoire
+    BaignoireController --> "*" Robinet
+    BaignoireController --> "*" Fuite
+}
+
+@enduml
