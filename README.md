@@ -42,5 +42,3 @@ Lancez le jar dans target avec les librairies javafx
 ## Conception graphique :
 ![Modele de la conception](ressources/Organisation_graphique.png)
 
-
-## Licence MIT :
