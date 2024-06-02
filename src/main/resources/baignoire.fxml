@@ -101,7 +101,7 @@
                                 </GridPane>
                             </bottom>
                             <center>
-                                <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                                <BorderPane fx:id="baignoirePane" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                            <bottom>
                               <AnchorPane minHeight="0.0" minWidth="0.0" prefWidth="0.0" style="-fx-background-color: lightblue;" BorderPane.alignment="CENTER">
                                  <children>

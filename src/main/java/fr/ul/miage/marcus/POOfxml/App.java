@@ -24,11 +24,11 @@ public class App extends Application {
     private static String fichier = null;
 
     @Override
-    public void start(Stage primaryStage){
+    public void start(Stage primaryStage) throws IllegalArgumentException{
         primaryStage.setTitle("Exercice JavaFX : Hello");
         try {
             FXMLLoader loader =new FXMLLoader(getClass().getResource("/baignoire.fxml"));
-            loader.setControllerFactory(c-> new BaignoireController(100, new int[]{1, 1, 1, 1}, new int[]{1, 1, 1, 1}));
+            loader.setControllerFactory(c-> new BaignoireController(100, new double[]{1, 1, 1, 1}, new double[]{1, 1, 1, 1}));
             Parent root = loader.load();
             Scene scene = new Scene(root);
             primaryStage.setScene(scene);

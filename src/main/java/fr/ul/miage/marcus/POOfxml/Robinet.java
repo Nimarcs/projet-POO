@@ -39,7 +39,7 @@ public class Robinet extends ScheduledService<Baignoire> {
      * @param baignoire baignoire associée
      * @param debit debit du robinet
      */
-    public Robinet(Baignoire baignoire, int debit){
+    public Robinet(Baignoire baignoire, double debit){
         this(baignoire);
         if (checkDebit(debit)){
             this.debit = debit;

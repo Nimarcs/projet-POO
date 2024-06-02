@@ -58,6 +58,10 @@ public class Baignoire {
         return volume;
     }
 
+    public double getCapacite() {
+        return capacite;
+    }
+
     public void vider() {
         volume = 0.0;
     }

@@ -41,7 +41,7 @@ public class Fuite extends ScheduledService<Baignoire> {
      * @param baignoire baignoire associée à la fuite
      * @param debit debit de la fuite
      */
-    public Fuite(Baignoire baignoire, int debit){
+    public Fuite(Baignoire baignoire, double debit){
         this(baignoire);
         if (checkDebit(debit))
             this.debit = debit;
