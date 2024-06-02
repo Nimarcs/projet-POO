@@ -1,11 +1,11 @@
 # Projet POO-javafx
 Ce projet est un projet scolaire qui permet d'expérimenter avec Maven et javafx.
-L'idée est de réprésenter une baignoire avec des fuites et des robinets qui la remplissent
+L'idée est de représenter une baignoire avec des fuites et des robinets qui la remplissent
 On définit un nombre de robinets et de fuite < 4 puis on lance la simulation
 On peut changer le débit de chaque robinet et supprimer certaines fuites
 Lorsque la baignoire est remplie, on arrête la simulation et affiche le temps pris.
 Ce projet est censé prendre un temps d'environ : 8h
-Ce projet à pris un temps de : 8h15
+Ce projet à pris un temps de : 12h20
 
 ![Screenshot de l application](ressources/ongletBaignoire.png)
 ![Screenshot de l application](ressources/ongletParametre.png)
