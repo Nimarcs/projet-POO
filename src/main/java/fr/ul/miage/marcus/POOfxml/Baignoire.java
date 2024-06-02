@@ -21,29 +21,42 @@ public class Baignoire {
         this.capacite = capacite;
     }
 
-    public boolean estPlein() {
+    public boolean estPlein(double volume) {
         return volume >= capacite;
     }
-    public boolean estVide() {
+
+    public boolean estPlein() {
+        return estPlein(volume);
+    }
+
+    public boolean estVide(double volume) {
         return volume <= 0;
     }
 
-    public double ajouterEau(double eau){
-        if (eau < 0.0) throw new IllegalArgumentException("L'eau est censé être positive");
-        volume += eau;
-        if (estPlein()){
-            volume = capacite;
-        }
-        return volume;
+    public boolean estVide() {
+        return estVide(volume);
     }
 
-    public double retirerEau(double eau){
+    public synchronized void ajouterEau(double eau){
         if (eau < 0.0) throw new IllegalArgumentException("L'eau est censé être positive");
-        volume -= eau;
-        if (estVide()){
+        double nouveauVolume = volume + eau;
+        if (estPlein(nouveauVolume)){
+            volume = capacite;
+        } else {
+          volume = nouveauVolume;
+        }
+    }
+
+    public synchronized void retirerEau(double eau){
+        if (eau < 0.0) throw new IllegalArgumentException("L'eau est censé être positive");
+        double nouveauVolume = volume - eau;
+        if (estVide(nouveauVolume)){
+            LOG.info("Plus d'eau !");
             volume = 0.0;
         }
-        return volume;
+        else {
+            volume = nouveauVolume;
+        }
     }
 
     public void setCapacite(double capacite) throws IllegalArgumentException {

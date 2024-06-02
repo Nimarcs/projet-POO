@@ -25,7 +25,7 @@ public class BaignoireController {
     public static final Logger LOG = Logger.getLogger(BaignoireController.class.getName());
 
     private static final int MAX_INOUT = 4;
-    public static final int VITESSE = 1000;
+    public static final int VITESSE = 500;
 
 
     @FXML
@@ -150,14 +150,13 @@ public class BaignoireController {
         this.debitRobinet = debitRobinet;
         this.debitFuite = debitFuite;
 
-        seriesLineChart = new XYChart.Series<Number, Number>();
+        seriesLineChart = new XYChart.Series<>();
         seriesLineChart.setName("Remplisage baignoire");
         NumberAxis axeX = new NumberAxis();
         axeX.setLabel("Temps");
         NumberAxis axeY = new NumberAxis();
         axeY.setLabel("Volume");
-        linechart = new LineChart<Number, Number>(axeX, axeY);
-        linechart.getData().add(seriesLineChart);
+        linechart = new LineChart<>(axeX, axeY);
 
 
     }
@@ -176,11 +175,12 @@ public class BaignoireController {
         } else {
             //Initialisation
             LOG.info("Demarrage de la simulation");
-            top = Instant.now();
             simulationEnCours = true;
             baignoire.vider();
             eauBaignoire.setHeight(0.0);
 
+            linechart.getData().clear();
+            seriesLineChart.getData().clear();
             linechart.getData().add(seriesLineChart);
 
             mettreAJourAffichageBouton(simulationEnCours);
@@ -211,13 +211,15 @@ public class BaignoireController {
                 fuites[i] = fuite;
             }
 
+            top = Instant.now();
+
             //On demarre la simulation
             for (int i = 0; i < MAX_INOUT; i++) {
-                if (fuites[i] != null) {
-                    fuites[i].start();
-                }
                 if (robinets[i] != null) {
                     robinets[i].start();
+                }
+                if (fuites[i] != null) {
+                    fuites[i].start();
                 }
             }
 
@@ -335,7 +337,7 @@ public class BaignoireController {
         robinet.setOnSucceeded((WorkerStateEvent e) -> {
             LOG.info("Robinet deverse");
             java.time.Duration tempsDepuisDepart = java.time.Duration.between(top, Instant.now());
-            linechart.getData().get(0).getData().add(new XYChart.Data<Number, Number>((Number) tempsDepuisDepart.toMillis(), (Number) baignoire.getVolume()));
+            linechart.getData().get(0).getData().add(new XYChart.Data<>(tempsDepuisDepart.toMillis(), baignoire.getVolume()));
             //On met a jour l'affichage
             mettreAJourBaignoire();
 
