@@ -27,23 +27,36 @@ import java.util.logging.Logger;
 
 public class BaignoireController {
 
+    /*
+    Constantes
+     */
+
+    /**
+     * Logger du controller
+     */
     public static final Logger LOG = Logger.getLogger(BaignoireController.class.getName());
 
+    /**
+     * Maximum de robinet et de fuite géré par l'application
+     * /!\ Changer cette valeur nécéssite de changer l'interface graphique
+     */
     private static final int MAX_INOUT = 4;
+
+    /**
+     * Vitesse de l'expérience
+     * Nombre de milliseconde entre chaque ajout/ponction d'eau dans la baignoire
+     */
     public static final int VITESSE = 500;
 
+    /*
+    FXML
+     */
 
     @FXML
     private LineChart<Number, Number> linechart;
 
     @FXML
     private Rectangle eauBaignoire;
-
-    @FXML
-    private GridPane reglageFuite;
-
-    @FXML
-    private GridPane boucherFuite;
 
     @FXML
     private BorderPane baignoirePane;
@@ -114,8 +127,6 @@ public class BaignoireController {
     @FXML
     private Button btn_demarrerArreter;
 
-    @FXML
-    private Button btn_reglageRobinet;
 
     @FXML
     private Button btn_reglageFuite;
@@ -124,22 +135,51 @@ public class BaignoireController {
     private Button btn_reglageCapacite;
 
     @FXML
-    private Button btn_exporterCSV;
-
-    @FXML
     private Text txt_boucherFuite;
 
+    /*
+    Attribut du controller
+     */
+
+    /**
+     * Baignoire qui sert de support aux expériences
+     */
     private final Baignoire baignoire;
 
+    /**
+     * Booléen à vrai si une simulation est en cours, à faux sinon
+     */
     private boolean simulationEnCours;
 
+    /**
+     * Array qui stocke les débits des robinets/fuites pour pouvoir recréer une simulation
+     */
     private double[] debitRobinet, debitFuite;
 
+    /**
+     * Début de la dernière simulation
+     */
     private Instant top;
 
+    /**
+     * Array des robinets qui verse dans la baignoire
+     * contient des null pour les robinets éteins
+     */
     private Robinet[] robinets;
+
+    /**
+     * Array des fuites de la baignoire
+     * contient des null pour les fuites rebouchées/inexistante
+     */
     private Fuite[] fuites;
 
+    /**
+     * Contructeur du controller
+     * @param capacite capacité la baignoire par défaut
+     * @param debitRobinet debit des robinets par défaut <b>/!\ Doit avoir une longueur de MAX_INOUT</b>
+     * @param debitFuite debit des fuites par défaut <b>/!\ Doit avoir une longueur de MAX_INOUT</b>
+     * @throws IllegalArgumentException renvoyé si les valeurs par défaut sont illégale
+     */
     public BaignoireController(double capacite, double[] debitRobinet, double[] debitFuite) throws IllegalArgumentException {
         LOG.setLevel(App.currentLogLevel);
         baignoire = new Baignoire(capacite);
@@ -166,6 +206,10 @@ public class BaignoireController {
     Reaction a l'appui de bouton
      */
 
+    /**
+     * Méthode qui gère le bouton Démarrer et le bouton Arreter
+     * Si la simulation est en cours l'arrete et change le texte du bouton, sinon la démarre et change le texte du bouton
+     */
     @FXML
     void demarrerArreter() {
         btn_demarrerArreter.setDisable(true);
@@ -218,6 +262,11 @@ public class BaignoireController {
         btn_demarrerArreter.setDisable(false);
     }
 
+    /**
+     * Méthode qui gère les MAX_INOUT boutons de rebouchage de fuite
+     * Traite sur quel bouton l'on a appuyé et rebouche la fuite correspondante
+     * @param event evenement d'appui sur le bouton
+     */
     @FXML
     void reparerFuite(ActionEvent event) {
         int indiceFuite = switch (((Button) event.getSource()).getId()) {
@@ -236,6 +285,10 @@ public class BaignoireController {
         regleVisibiliteEntreSortieEau();
     }
 
+    /**
+     * Méthode qui met à jour le réglage des robinets
+     * Peut fonctionner alors que la simulation est en cours
+     */
     @FXML
     void reglageRobinet() {
         try {
@@ -279,16 +332,26 @@ public class BaignoireController {
         }
     }
 
+    /**
+     * Méthode qui permet de changer les débits des différentes fuites
+     * Ne doit pas être lancé alors que la simulation est en cours
+     */
     @FXML
     void reglageFuite() {
 
-        if (simulationEnCours)
+        if (simulationEnCours) {
             afficheErreur("On ne peut pas parametrer les fuites en cours de route");
+            return;
+        }
 
         debitFuite = new double[]{recupereDouble(tf_reglageFuite1), recupereDouble(tf_reglageFuite2), recupereDouble(tf_reglageFuite3), recupereDouble(tf_reglageFuite4)};
         afficheInformation("Les fuites ont bien été mise à jour");
     }
 
+    /**
+     * Methode qui permet de changer la capacité de la baignoire
+     * Ne doit pas être lancé alors que la simulation est en cours
+     */
     @FXML
     public void reglageCapacite() {
         try {
@@ -307,6 +370,9 @@ public class BaignoireController {
         }
     }
 
+    /**
+     * Méthode qui permet d'exporter la version CSV du graphique
+     */
     @FXML
     public void exporterCSV() {
         try {
@@ -314,7 +380,7 @@ public class BaignoireController {
             writer.writeAll(baignoire.getListeExport());
             writer.close();
 
-            afficheInformation("Sauvegarde de l'export réussite");
+            afficheInformation("Sauvegarde de l'export réussite, le fichier est à la racine");
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -325,6 +391,12 @@ public class BaignoireController {
 
     /*
     PRIVATE FONCTION
+     */
+
+    /**
+     * Méthode qui permet de créer un nouveau robinet
+     * @param debit debit du nouveau robinet
+     * @return robinet créé
      */
     private Robinet creerRobinet(double debit) {
         Robinet robinet = new Robinet(baignoire, debit);
@@ -343,6 +415,9 @@ public class BaignoireController {
         return robinet;
     }
 
+    /**
+     * Méthode qui permet de mettre fin à la simulation
+     */
     private void terminerSimulation() {
         LOG.info("Arret de la simulation");
         simulationEnCours = false;
@@ -363,7 +438,14 @@ public class BaignoireController {
         mettreAJourAffichageBouton(simulationEnCours);
     }
 
-
+    /**
+     * Méthode qui récupère le double contenu dans un TextField
+     * Si le textField est vide, on suppose 0
+     *
+     * @param textField TextField supposé contenir un double
+     * @return double contenu
+     * @throws NumberFormatException Si le TextField ne contient pas de double
+     */
     private double recupereDouble(TextField textField) throws NumberFormatException {
         try {
             String text = textField.getText();
@@ -375,6 +457,11 @@ public class BaignoireController {
         }
     }
 
+    /**
+     * Methode qui vérifie la validité d'un array de debit
+     * @param debits array de débit
+     * @throws IllegalArgumentException renvoyé en cas de non validité
+     */
     private void verifieDebitArray(double[] debits) throws IllegalArgumentException {
         if (debits.length != MAX_INOUT)
             throw new IllegalArgumentException("La liste de debit par default doit faire une longueur de 5");
@@ -383,6 +470,9 @@ public class BaignoireController {
         }
     }
 
+    /**
+     * Methode qui met a jour le visuel des robinet et fuite sur l'interface graphique
+     */
     private void regleVisibiliteEntreSortieEau() {
         LOG.info("Modification de l'affichage des entrées/sortie d'eau");
         //robinets
@@ -391,12 +481,20 @@ public class BaignoireController {
         regleVisibiliteEntreSortieEau(fuite1, fuite2, fuite3, fuite4, debitFuite);
     }
 
+    /**
+     * Méthode qui gére l'affichage de Panel en fonction du nombre de débit non null
+     * @param pane1 Panel à afficher ou non
+     * @param pane2 Panel à afficher ou non
+     * @param pane3 Panel à afficher ou non
+     * @param pane4 Panel à afficher ou non
+     * @param debits array de debit qui permet de savoir combien seront affiché
+     */
     private void regleVisibiliteEntreSortieEau(Pane pane1, Pane pane2, Pane pane3, Pane pane4, double[] debits) {
         pane1.setVisible(true);
         pane2.setVisible(true);
         pane3.setVisible(true);
         pane4.setVisible(true);
-        switch (Arrays.stream(debits).filter((elem) -> elem != 0).toArray().length) {
+        switch (Arrays.stream(debits).filter((elem) -> elem > 0).toArray().length) {
             case 0:
                 pane1.setVisible(false);
             case 1:
@@ -410,17 +508,29 @@ public class BaignoireController {
         }
     }
 
-    private void afficheErreur(String s) {
-        LOG.severe(s);
-        Alert alert = new Alert(Alert.AlertType.ERROR, s);
+    /**
+     * Méthode qui permet d'afficher un message d'erreur dans l'application
+     * @param message message d'erreur a afficher
+     */
+    private void afficheErreur(String message) {
+        LOG.severe(message);
+        Alert alert = new Alert(Alert.AlertType.ERROR, message);
         alert.show();
     }
 
-    private void afficheInformation(String s) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION, s);
+    /**
+     * Méthode qui permet d'afficher un message d'information dans l'application
+     * @param message message à afficher
+     */
+    private void afficheInformation(String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, message);
         alert.show();
     }
 
+    /**
+     * Méthode qui met à jour l'affichage et l'aspect cliquable des boutons en fonction de si la simulation est en cours
+     * @param simulationEnCours booleen à vrai si la simulation est en cours, faux sinon
+     */
     private void mettreAJourAffichageBouton(boolean simulationEnCours) {
         //On active desactives les boutons
         btn_reglageFuite.setDisable(simulationEnCours);
@@ -438,6 +548,9 @@ public class BaignoireController {
         btn_fuite4.setVisible(simulationEnCours);
     }
 
+    /**
+     * Méthode qui met à jour l'aspect de la baignoire pour que sont remplisage soit proportionel à sa taille
+     */
     private void mettreAJourBaignoire() {
         double maxHeight = baignoirePane.getHeight();
         double capacity = baignoire.getCapacite();
