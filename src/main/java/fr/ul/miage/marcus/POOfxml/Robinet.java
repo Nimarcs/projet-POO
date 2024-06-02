@@ -56,8 +56,10 @@ public class Robinet extends ScheduledService<Baignoire> {
         return new Task<>() {
             @Override
             protected Baignoire call() {
-                baignoire.ajouterEau(debit);
-                return baignoire;
+                synchronized (baignoire){
+                    baignoire.ajouterEau(debit);
+                    return baignoire;
+                }
             }
         };
     }

@@ -59,8 +59,10 @@ public class Fuite extends ScheduledService<Baignoire> {
         return new Task<>() {
             @Override
             protected Baignoire call() {
-                baignoire.retirerEau(debit);
-                return baignoire;
+                synchronized (baignoire){
+                    baignoire.retirerEau(debit);
+                    return baignoire;
+                }
             }
         };
     }
