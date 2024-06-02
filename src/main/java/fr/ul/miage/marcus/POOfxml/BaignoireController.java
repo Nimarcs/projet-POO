@@ -185,6 +185,7 @@ public class BaignoireController {
             simulationEnCours = true;
             baignoire.vider();
             eauBaignoire.setHeight(0.0);
+            top = Instant.now();
 
             linechart.getData().clear();
             seriesLineChart.getData().clear();
@@ -202,6 +203,7 @@ public class BaignoireController {
                 double debit = debitRobinet[i];
                 Robinet robinet = creerRobinet(debit);
                 robinets[i] = robinet;
+                robinet.start();
             }
 
             //On defini les fuites
@@ -219,18 +221,7 @@ public class BaignoireController {
 
                 fuite.setPeriod(Duration.millis(VITESSE));
                 fuites[i] = fuite;
-            }
-
-            top = Instant.now();
-
-            //On demarre la simulation
-            for (int i = 0; i < MAX_INOUT; i++) {
-                if (robinets[i] != null) {
-                    robinets[i].start();
-                }
-                if (fuites[i] != null) {
-                    fuites[i].start();
-                }
+                fuite.start();
             }
 
             btn_demarrerArreter.setText("Arreter simulation");
