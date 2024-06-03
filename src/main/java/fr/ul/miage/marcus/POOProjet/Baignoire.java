@@ -24,6 +24,7 @@ public class Baignoire {
      * Capacité par defaut de la baignoire
      */
     public static final double CAPACITE_PAR_DEFAUT = 100;
+    public static final String[] TITRE_LISTE_EXPORT = {"Milliseconde", "Volume", "Eau utilisée"};
 
     /**
      * Suite de valeurs servant à créer un graphique via JavaFX
@@ -51,6 +52,11 @@ public class Baignoire {
     private double volume;
 
     /**
+     * Eau utilisée dans la baignoire
+     */
+    private double eauUtilise;
+
+    /**
      * Constructeur qui contruit une baignoire par défaut
      */
     public Baignoire() {
@@ -67,6 +73,7 @@ public class Baignoire {
         xySeries = new XYChart.Series<>();
         xySeries.setName("Remplisage baignoire");
         listeExport = new ArrayList<>();
+        listeExport.add(TITRE_LISTE_EXPORT);
     }
 
     /**
@@ -79,6 +86,7 @@ public class Baignoire {
      */
     public synchronized void ajouterEau(double eau){
         if (eau < 0.0) throw new IllegalArgumentException("L'eau est censé être positive");
+        eauUtilise += eau;
         double nouveauVolume = volume + eau;
         if (estPlein(nouveauVolume)){
             volume = capacite;
@@ -179,8 +187,10 @@ public class Baignoire {
      */
     public void vider() {
         volume = 0.0;
+        eauUtilise = 0.0;
         xySeries.getData().clear();
         listeExport.clear();
+        listeExport.add(TITRE_LISTE_EXPORT);
     }
 
     /**
@@ -212,7 +222,7 @@ public class Baignoire {
      */
     private void ajouterNouvelleValeurDansGraphiques() {
         java.time.Duration tempsDepuisDepart = java.time.Duration.between(top, Instant.now());
-        listeExport.add(new String[]{String.valueOf(tempsDepuisDepart.toMillis()), String.valueOf(volume)});
+        listeExport.add(new String[]{String.valueOf(tempsDepuisDepart.toMillis()), String.valueOf(volume), String.valueOf(eauUtilise)});
         //On ajoute la tache d'ajouter la valeur car cela ne tourne pas dans le même thread que javaFX
         Platform.runLater(
                 () -> xySeries.getData().add(new XYChart.Data<>(tempsDepuisDepart.toMillis(), volume))
