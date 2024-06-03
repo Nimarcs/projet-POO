@@ -7,7 +7,8 @@ Lorsque la baignoire est remplie, on arrête la simulation et affiche le temps p
 On peut également faire le bilan sur les simulations avec :
 - L'eau utilisée
 - La courbe de remplissage
-Ce projet est censé prendre un temps d'environ : 8h
+   
+Ce projet est censé prendre un temps d'environ : 8h  
 Ce projet à pris un temps de : 12h50
 
 ![Screenshot de l application](ressources/ongletBaignoire.png)
